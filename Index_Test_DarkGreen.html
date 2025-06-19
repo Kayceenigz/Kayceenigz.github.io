@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+
+<html data-route="a" id="page" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Shane Silveira | Game Developer Portfolio</title>
+<style>
+    /* Reset & Global Styles */
+* {
+  box-sizing: border-box;
+}
+body{
+    touch-action: pan-y;
+}
+    html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
+  background: linear-gradient(-45deg, #f5f7fa, #c3cfe2, #fdfdfd, #d7dde8);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Navigation Bar */
+.navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  transition: opacity 0.4s ease;
+}
+
+.nav-links a {
+  text-decoration: none;
+  border: 1px solid #252525;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  color: #252525;
+  background-color: transparent;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+  background-color: #252525;
+  color: #fff;
+}
+
+/* Main Content */
+#page {
+  min-height: 100vh;
+  padding-top: var(--nav-height, 4rem);
+  position: relative;
+}
+
+/* Container-based page transitions */
+.container {
+  padding-top: 6rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  min-height: 100vh;
+  width: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+.a, .b, .c {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+[data-route="a"] .a,
+[data-route="b"] .b,
+[data-route="c"] .c {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.3s ease;
+}
+
+.loader,
+.container,
+#page {
+  overflow-x: hidden;
+}
+/* Loader transition bar */
+.loader {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background-color: #252525;
+  transform: translateX(-100%);
+  transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/*  Work Cards */
+.work-wrapper {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.work-wrapper h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #252525;
+}
+
+.work-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+}
+
+
+.work-card {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.work-card:hover {
+  transform: translateY(-5px);
+}
+
+.work-card img {
+  width: 100%;
+  height: 50%;
+  display: block;
+}
+
+.work-card h3 {
+  padding: 1rem 1rem 0.5rem;
+  margin: 0;
+}
+
+.work-card p {
+  padding: 0 1rem 1rem;
+  margin: 0;
+  flex-grow: 1;
+  color: #555;
+}
+
+/* FLIP CARD CONTAINER */
+.flip-card {
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* FRONT & BACK SIDES */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.flip-card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.flip-card-front h3,
+.flip-card-back h3 {
+  margin: 1rem 0 0.5rem;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.contact-icons {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .contact-link img {
+    width: 100px;
+    height: 100px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .contact-link:hover img {
+    transform: scale(1.2);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  .contact-link p {
+    margin-top: 0.5rem;
+    font-weight: bold;
+    font-size: 0.95rem;
+  }
+
+.flip-btn {
+  align-self: flex-start;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #252525;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.flip-btn:hover {
+  background-color: #444;
+}
+
+.view-button {
+  margin: 0 1rem 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #252525;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  align-self: flex-start;
+  transition: background 0.2s;
+}
+
+.view-button:hover {
+  background-color: #444;
+} 
+
+
+/* About Section */
+.about-wrapper {
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 1200px;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.profile-pic {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
+.about-text {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #252525;
+}
+
+.about-text h2 {
+  color: #00ff99;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-text ul {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.about-text li {
+  margin-bottom: 0.5rem;
+}
+
+/* Gallery Section */
+.dev-gallery {
+  padding: 2rem;
+  text-align: center;
+}
+
+.gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.gallery-grid img {
+  width: 500px;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.gallery-grid img:hover {
+  transform: scale(1.03);
+}
+
+/* Typing Effect */
+.typed-text {
+  color: #00ff99;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.cursor {
+  display: inline-block;
+  width: 1ch;
+  animation: blink 0.7s steps(1) infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Reveal on Scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /*.navigation {
+    flex-direction: column;
+    align-items: flex-start;
+    width : 100%;
+  }*/
+
+  .hamburger {
+    display: block;
+    color: #00ff99;
+  }
+
+  .nav-links {
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease;
+  opacity: 1; /* Always fully visible */
+  transform: none; /* No slide transform */
+  display: flex; /* Always flex, just collapse via height */
+}
+
+.nav-links.open {
+  max-height: 500px; /* Enough to show all links */
+}
+
+.nav-links a {
+  width: 100%;
+  text-align: left;
+}
+
+  .about-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-pic {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+  
+/* DARK THEME SETUP */
+html, body {
+  background: linear-gradient(-45deg, #0f0f0f, #3a4238, #3a4238, #0e0e0e);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+  color: #e0e0e0;
+}
+
+/* NAVIGATION BAR */
+.navigation {
+  background-color: #121212;
+  box-shadow: 0 2px 8px rgba(0, 255, 153, 0.1);
+}
+
+.nav-links a {
+  border: 1px solid #00ff99;
+  color: #00ff99;
+  background-color: transparent;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+  background-color: #00ff99;
+  color: #121212;
+}
+
+/* BUTTON STYLES */
+.flip-btn,
+.view-button {
+  background-color: #00ff99;
+  color: #121212;
+}
+
+.flip-btn:hover,
+.view-button:hover {
+  background-color: #33ffaa;
+}
+
+/* WORK CARD AREA */
+.work-wrapper h2 {
+  color: #00ff99;
+}
+
+
+.flip-card-inner {
+  height: 440px;
+}
+
+.flip-card-front img {
+  height: 220px;
+}
+
+.project-video {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  display: block;
+  background: black;
+}
+
+
+.flip-card,
+.flip-card-front,
+.flip-card-back {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  box-shadow: 0 4px 20px rgba(0, 255, 153, 0.05);
+}
+
+/* GALLERY */
+.gallery-grid img {
+  box-shadow: 0 4px 16px rgba(0, 255, 153, 0.15);
+}
+
+/* ABOUT SECTION */
+.about-text h2,
+.about-text li,
+.about-text p {
+  color: #e0ffe8;
+}
+
+/* CONTACT ICONS */
+.contact-link p {
+  color: #00ff99;
+}
+
+@media (min-width: 1024px) {
+  .flip-card-inner {
+    height: 640px;
+  }
+  .work-card-grid {
+    grid-template-columns: repeat(3, minmax(600px, 1fr));
+  }
+}
+</style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navigation">
+<button aria-label="Toggle Navigation" class="hamburger">☰</button>
+<div class="nav-links">
+<a class="active" href="#" onclick="onRouteClick('a')">About</a>
+<a href="#" onclick="onRouteClick('b')">Work</a>
+<a href="#" onclick="onRouteClick('c')">Contact</a>
+</div>
+</nav>
+<!-- Loader for transition effect -->
+<div class="loader"></div>
+<!-- Page Routes -->
+<div class="container a">
+<section class="about-wrapper">
+<img alt="Profile Picture" class="profile-pic" src="PP.jpg"/>
+<div class="about-text">
+<h1><span class="typed-text"></span><span class="cursor">|</span></h1>
+<p>
+          Hi, I'm Shane Warren Silveira — a passionate and aspiring Game Developer currently pursuing my Bachelor's degree in Computer Science and Game Development. While Unity is my primary tool, I also have hands-on experience with Unreal Engine, using both Blueprints and C++ to bring immersive ideas to life.
+        </p>
+<p>Beyond programming, I have a deep interest in game design. I’m currently interning at **Kyodai Games Interactive**, where I’ve had the opportunity to work on system design, balancing, monetization models, and player metrics — helping me understand how games work not just technically, but as complete, enjoyable systems.</p>
+<p>This very website was designed and developed entirely by me from scratch — a side project that sparked my curiosity in web technologies. While game development remains my primary focus, I’m actively learning web application development and looking to grow into full-stack development as well.</p>
+<p>Here’s what I bring to the table:</p>
+<ul>
+<li>Gameplay programming &amp; prototyping (Unity C#, Unreal C++)</li>
+<li>Game &amp; level design with a focus on balancing and systems</li>
+<li>Monetization strategies and metric analysis</li>
+<li>Web dev skills: HTML, CSS, JavaScript</li>
+<li>A drive to learn, build, and collaborate creatively</li>
+</ul>
+<p>Outside of development, I’m someone who loves **anything with an engine**. I’m an **avid biker**, always seeking the next **adventure** — whether it’s hitting the open road or exploring new places off the beaten path. That same sense of exploration and thrill drives my approach to creating games and experiences that resonate with people.</p>
+<p>I’m excited to keep building, keep learning, and keep creating meaningful interactive experiences — both in games and on the web.</p>
+<p><em>Let’s make something awesome together.</em></p>
+</div>
+</section>
+<!-- Gallery -->
+<section class="dev-gallery reveal">
+<div class = "about-text"><h2>Gallery: Snapshots from My Projects</h2>
+<div class="gallery-grid">
+<img alt="Game Screenshot 1" src="Gameplay/Into the Dead.jpg"/>
+<img alt="Game Screenshot 2" src="Gameplay/Do You Suck Gameplay.jpg"/>
+<img alt="Game Screenshot 3" src="Gameplay/Marathon Runner.jpg"/>
+<img alt="Game Screenshot 3" src="Gameplay/HIDE_Gameplay.jpg"/>
+<img alt="Game Screenshot 3" src="Gameplay/Bubble UP.jpg"/>
+<img alt="Game Screenshot 3" src="Gameplay/Fire Propagation Gameplay.jpg"/>
+</div>
+</div>
+</section>
+</div>
+<!-- Work Page -->
+<div class="container b">
+<section class="reveal" style="padding: 2rem;">
+<section class="work-wrapper reveal">
+<h2>My Projects</h2>
+<div class="work-card-grid">
+
+<!-- Project Card 1 -->
+<div class="flip-card">
+<div class="flip-card-inner">
+<!-- FRONT -->
+<div class="flip-card-front">
+<video class="project-video" muted loop playsinline preload="metadata">
+  <source src="Gameplay/Into the Dead - Remake Gameplay.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<h3>Into the Dead - Remake</h3>
+<p>Highly inspired by the game, Into the Dead, this is my take on trying to remake it for practice.</p>
+<button class="flip-btn">View More</button>
+</div>
+<!-- BACK -->
+<div class="flip-card-back">
+<h3>Into the Dead - Remake - Details</h3>
+<p><strong>Tools:</strong> Unity, C#, Blender</p>
+<p>This was a practice/self improvement project that I started working on in the background while also focusing on other projects. </p>
+<p>I used a stationary player and a moving segment based system to make the endless running system. As the player survives for longer, the level gets harder and faster with harder segments coming up one after the other. The zombies are spawned in and on collision with the player, ends the run.</p>
+<p>This was the first time i had developed a game with an endless running system and was a milestone for me.</p>
+<button class="flip-btn">Back</button>
+</div>
+</div>
+</div>
+
+<!-- Project Card 2 -->
+<div class="flip-card">
+<div class="flip-card-inner">
+<!-- FRONT -->
+<div class="flip-card-front">
+<video class="project-video" muted loop playsinline preload="metadata">
+  <source src="Gameplay/Do You Suck Gameplay.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<h3>Do You Suck?</h3>
+<p>A 2D parkour platformer to challenge you to reaching an end goal, similar to Happy Wheels.</p>
+<button class="flip-btn">View More</button>
+</div>
+<!-- BACK -->
+<div class="flip-card-back">
+<h3>Do You Suck? - Details</h3>
+<p><strong>Tools:</strong> Unity, C#, Photoshop</p>
+<p>Executed as a project for an examination, this grew into more than that as my friends and I tried to compete for better times.</p>
+<p>The player moves around using WASD and Spacebar to jump and perform wall jumps and follow the level to the finish line while also being annoying and difficult even though it may not seem so.</p>
+<p>This game was inspired by Happy Wheels and was one of the first game projects I ever worked on.</p>
+<button class="flip-btn">Back</button>
+</div>
+</div>
+</div>
+
+<!-- Project Card 3 -->
+<div class="flip-card">
+<div class="flip-card-inner">
+<!-- FRONT -->
+<div class="flip-card-front">
+<video class="project-video" muted loop playsinline preload="metadata">
+  <source src="Gameplay/Maze Runner Gameplay.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<h3>Maze Runner</h3>
+<p>A fluid 3D Maze Running Game to Compete with friends and has endless replayability.</p>
+<button class="flip-btn">View More</button>
+</div>
+<!-- BACK -->
+<div class="flip-card-back">
+<h3>Maze Runner - Details</h3>
+<p><strong>Tools:</strong> Unity, C#, Blender</p>
+<p>This game was made with one thing in mind, how do we keep the player involved. To increase playtime, I made complicated mazes that vary in size. The player can begin with the easy maze and then work their way through the harder mazes.</p>
+<p>The player has to finish the maze as fast as they can and compete with friends.</p>
+<button class="flip-btn">Back</button>
+</div>
+</div>
+</div>
+
+<!-- Project Card 4 -->
+<div class="flip-card">
+<div class="flip-card-inner">
+<!-- FRONT -->
+<div class="flip-card-front">
+<img alt="Marathon Runner Thumbnail" src="Gameplay/Marathon Runner.jpg"/>
+<h3>Marathon Runner</h3>
+<p>Endless runner based on Subway Surfers with a twist.</p>
+<button class="flip-btn">View More</button>
+</div>
+<!-- BACK -->
+<div class="flip-card-back">
+<h3>Marathon Runner - Details</h3>
+<p><strong>Tools:</strong> Unity, C#, Blender</p>
+<p>This was a project that I wanted to make to try and remake the feel of Subway Surfers. But instead of just making a simple remake, I added an adition mechanic of needing to refuel, or in this case, rehydrate.</p>
+<p>Using the script I had earlier written for Into the Dead - Remake, with some changes, this game adds a new depth by having the player keep an eye out on the hydration level and keep an eye out for bottles to rehydrate.</p>
+<button class="flip-btn">Back</button>
+</div>
+</div>
+</div>
+
+<!-- Project Card 5 -->
+<div class="flip-card">
+<div class="flip-card-inner">
+<!-- FRONT -->
+<div class="flip-card-front">
+<video class="project-video" muted loop playsinline preload="metadata">
+  <source src="Gameplay/HIDE Gameplay.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<h3>HIDE</h3>
+<p>A Project heavily insipred by Sqube Darkness to make a game where the player has to use a core hiding ability.</p>
+<button class="flip-btn">View More</button>
+</div>
+<!-- BACK -->
+<div class="flip-card-back">
+<h3>HIDE - Details</h3>
+<p><strong>Tools:</strong> Unity, C#, Photoshop</p>
+<p>Creating this game, inspired by Sqube Darkness, came with several challenges. The core idea was for the player—a simple cube—to hide by merging with the ground to avoid patrolling enemies. One of the hardest parts was designing AI that could patrol, detect, and chase fairly, which required multiple tweaks to balance tension and fairness.</p>
+<p>The goal was to create a constant sense of danger while still allowing for strategic play, resulting in a minimal yet engaging stealth experience.</p>
+<button class="flip-btn">Back</button>
+</div>
+</div>
+</div>
+
+<!-- Project Card 6 -->
+<div class="flip-card">
+<div class="flip-card-inner">
+<!-- FRONT -->
+<div class="flip-card-front">
+<video class="project-video" muted loop playsinline preload="metadata">
+  <source src="Gameplay/Bubble UP Gameplay.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<h3>Bubble UP</h3>
+<p>Basic level based hypercasual game made during the Global Game Jam 2025</p>
+<button class="flip-btn">View More</button>
+</div>
+<!-- BACK -->
+<div class="flip-card-back">
+<h3>Bubble UP - Details</h3>
+<p><strong>Tools:</strong> Unity, C#, Photoshop</p>
+<p>This level-based hypercasual game was centered around simple, intuitive gameplay—guiding a bubble upward while swiping to dodge fish and obstacles. The core challenge was making the controls feel smooth and responsive, especially as the bubble moved continuously toward the surface.</p>
+<p>Balancing level difficulty and obstacle placement was key to keeping players engaged without overwhelming them. The goal was to create a relaxing yet satisfying experience that encouraged quick retries and steady progress.</p>
+<button class="flip-btn">Back</button>
+</div>
+</div>
+</div>
+
+<!-- Project Card 7 -->
+<div class="flip-card">
+<div class="flip-card-inner">
+<!-- FRONT -->
+<div class="flip-card-front">
+<video class="project-video" muted loop playsinline preload="metadata">
+  <source src="Gameplay/Fire Propagation Gameplay.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<h3>Fire Propagation - Mechanic</h3>
+<p>A basic fire propagation mechanic that I developed through research</p>
+<button class="flip-btn">View More</button>
+</div>
+<!-- BACK -->
+<div class="flip-card-back">
+<h3>Fire Propagation - Mechanic - Details</h3>
+<p><strong>Tools:</strong> Unity, C#, Research</p>
+<p>This fire propagation mechanic was developed as part of a research project focused on simulating realistic fire behavior in games. The system allowed players to set fires, with wind speed and direction, terrain moisture, and flammability all influencing how the fire spread. The goal was to explore how environmental variables could dynamically affect gameplay and visual outcomes.</p>
+</p>One of the main challenges was balancing realism with performance, especially when simulating fire across large or varied terrains. It required careful tuning of parameters and optimization to ensure consistent and believable fire behavior without sacrificing game fluidity.</p>
+<button class="flip-btn">Back</button>
+</div>
+</div>
+</div>
+
+<!-- Project Card 8 -->
+<div class="flip-card">
+<div class="flip-card-inner">
+<!-- FRONT -->
+<div class="flip-card-front">
+<video class="project-video" muted loop playsinline preload="metadata">
+  <source src="Gameplay/VR Golf Gameplay.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<h3>VR Golf Gameplay</h3>
+<p>My first full fledge VR Game that I worked on.</p>
+<button class="flip-btn">View More</button>
+</div>
+<!-- BACK -->
+<div class="flip-card-back">
+<h3>VR Golf Gameplay - Details</h3>
+<p><strong>Tools:</strong> Unity, C#, Blender, VR</p>
+<p>This VR Golf game was designed with three unique courses where players aim to complete each with as few ball hits as possible. The core gameplay focused on providing an immersive and skill-based experience in virtual reality.</p>
+<p>One of the key challenges was achieving accurate and responsive ball physics. Getting the ball to behave realistically based on swing strength and angle took extensive tweaking and testing to ensure a satisfying and believable golfing experience.</p>
+<button class="flip-btn">Back</button>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+</section>
+</div>
+<!-- Contact Page -->
+<div class="container c">
+<section class="reveal" style="padding: 2rem; text-align: center;">
+<h1>Get in Touch</h1>
+<p>You can reach me through any of the platforms below:</p>
+<div class="contact-icons">
+<a class="contact-link" href="mailto:shanewsilveira@gmail.com" target="_blank">
+<img alt="Email" class="contact-icon" src="https://img.icons8.com/?size=100&id=12623&format=png&color=40C057">
+<p>Email</p>
+</img></a>
+<a class="contact-link" href="https://www.linkedin.com/in/shane-silveira-117806218/" target="_blank">
+<img alt="LinkedIn" class="contact-icon" src="https://cdn-icons-png.flaticon.com/512/174/174857.png">
+<p>LinkedIn</p>
+</img></a>
+<a class="contact-link" href="https://www.instagram.com/kayceenigz" target="_blank">
+<img alt="Instagram" class="contact-icon" src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+<p>Instagram</p>
+</img></a>
+<a class="contact-link" href="tel:+919902037919">
+<img alt="Phone" class="contact-icon" src="https://cdn-icons-png.flaticon.com/512/724/724664.png">
+<p>Call</p>
+</img></a>
+</div>
+</section>
+</div>
+<!-- Script -->
+<script>
+    const appRoot = document.getElementById("page");
+const nav = document.querySelector(".nav-links");
+const navLinks = document.querySelectorAll(".nav-links a");
+const root = document.documentElement;
+const loader = document.querySelector(".loader");
+const hamburgerBtn = document.querySelector(".hamburger");
+
+let pendingRoute = null;
+
+// Update top padding dynamically based on nav height
+function updateNavHeight() {
+  const navBar = document.querySelector('.navigation');
+  if (navBar) {
+    const height = navBar.offsetHeight;
+    document.documentElement.style.setProperty('--nav-height', `${height}px`);
+  }
+}
+
+window.addEventListener("load", updateNavHeight);
+window.addEventListener("resize", updateNavHeight);
+
+function startTransition() {
+  appRoot.dataset.route = "a";
+  setActiveNav("a");
+}
+
+function onRouteClick(route) {
+  if (appRoot.dataset.route === route) return;
+  pendingRoute = route;
+  nav.classList.remove("open");
+  setActiveNav(route);
+
+  root.classList.add("disable-hover");
+  loader.style.transition = "none";
+  loader.style.transform = "translateX(-100%)";
+  void loader.offsetWidth;
+  loader.style.transition = "transform 0.9s cubic-bezier(0.76, 0, 0.24, 1)";
+  loader.style.transform = "translateX(0%)";
+}
+
+function setActiveNav(route) {
+  navLinks.forEach(link => {
+    const linkRoute = link.getAttribute("onclick")?.match(/'(\w)'/);
+    if (linkRoute && linkRoute[1] === route) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
+}
+
+function handleLoaderTransitionEnd() {
+  if (loader.style.transform === "translateX(0%)" && pendingRoute !== null) {
+    appRoot.dataset.route = pendingRoute;
+    pendingRoute = null;
+    loader.style.transform = "translateX(100%)";
+  } else {
+    root.classList.remove("disable-hover");
+  }
+}
+
+hamburgerBtn?.addEventListener("click", () => {
+  nav.classList.toggle("open");
+});
+
+nav.addEventListener("click", (e) => {
+  if (e.target.nodeName === "A") {
+    e.preventDefault();
+    const route = e.target.getAttribute("onclick")?.match(/'(\w)'/)[1];
+    if (route) onRouteClick(route);
+  }
+});
+
+loader.addEventListener("transitionend", handleLoaderTransitionEnd);
+window.onRouteClick = onRouteClick;
+
+// Typing effect
+const typedTextSpan = document.querySelector(".typed-text");
+const cursorSpan = document.querySelector(".cursor");
+const textArray = ["Hi, I'm Shane Warren Silveira"];
+const typingDelay = 60;
+let charIndex = 0;
+
+function type() {
+  if (charIndex < textArray[0].length) {
+    typedTextSpan.textContent += textArray[0].charAt(charIndex);
+    charIndex++;
+    setTimeout(type, typingDelay);
+  }
+}
+
+window.addEventListener("load", () => {
+  startTransition();
+  setTimeout(type, 800);
+});
+
+// Reveal on scroll
+const revealElements = document.querySelectorAll(".reveal");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll(".flip-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const flipCard = btn.closest(".flip-card");
+    flipCard.classList.toggle("flipped");
+  });
+});
+
+const contactIcons = document.querySelectorAll('.contact-icon');
+
+  contactIcons.forEach(icon => {
+    icon.style.transition = 'transform 0.3s ease';
+
+    icon.addEventListener('mouseenter', () => {
+      icon.style.transform = 'scale(1.2)';
+      icon.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)';
+    });
+
+    icon.addEventListener('mouseleave', () => {
+      icon.style.transform = 'scale(1)';
+      icon.style.boxShadow = 'none';
+    });
+  });
+revealElements.forEach(el => observer.observe(el));
+// Pause/play project videos on hover
+document.querySelectorAll('.project-video').forEach(video => {
+  video.addEventListener('mouseenter', () => video.play());
+  video.addEventListener('mouseleave', () => {
+    video.pause();
+    video.currentTime = 0; // Rewind on exit
+  });
+});
+
+  </script>
+</body>
+</html>
