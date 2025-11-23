@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sketchy, But Keeps Spinning</title>
+  <style>
+    html, body {
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      font-family: system-ui, sans-serif;
+    }
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: black;
+      z-index: -1;
+    }
+    #codeEditor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 4rem);
+      background: #111;
+      color: #fefefe;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      tab-size: 2;
+      border: none;
+      resize: none;
+      padding: 1em;
+      outline: none;
+      white-space: pre;
+    }
+    #error {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4rem;
+      background: #111;
+      color: firebrick;
+      font-family: 'Courier New', Courier, monospace;
+      overflow: auto;
+      padding: 0.5em 1em;
+    }
+    #controls {
+      position: absolute;
+      top: 1em;
+      right: 2em;
+      display: flex;
+      gap: 1em;
+    }
+    .icon {
+      background: #111;
+      color: white;
+      padding: 0.5em;
+      border-radius: 0.5em;
+      cursor: pointer;
+      user-select: none;
+      font-size: 1.25em;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <textarea id="codeEditor" spellcheck="false"></textarea>
+  <pre id="error"></pre>
+  <div id="controls">
+    <div class="icon" onclick="toggleView()">👁</div>
+    <div class="icon" onclick="toggleResolution()">1️⃣</div>
+    <div class="icon" onclick="reset()">⏮️</div>
+  </div>
+  <script>
+    let dpr = window.devicePixelRatio;
+    let canvas = document.getElementById("canvas");
+    let gl = canvas.getContext("webgl2");
+    let editor = document.getElementById("codeEditor");
+    let errorOutput = document.getElementById("error");
+    let showEditor = true;
+    let fullRes = true;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+
+    function compileShader(type, source) {
+      let shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        let log = gl.getShaderInfoLog(shader);
+        gl.deleteShader(shader);
+        throw new Error(log);
+      }
+      return shader;
+    }
+
+    function createProgram(vertexSrc, fragmentSrc) {
+      let program = gl.createProgram();
+      let vs = compileShader(gl.VERTEX_SHADER, vertexSrc);
+      let fs = compileShader(gl.FRAGMENT_SHADER, fragmentSrc);
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        let log = gl.getProgramInfoLog(program);
+        throw new Error(log);
+      }
+      return program;
+    }
+
+    const vertexShader = `#version 300 es
+    in vec4 position;
+    void main() {
+      gl_Position = position;
+    }`;
+
+    const quadVertices = new Float32Array([
+      -1,  1,
+      -1, -1,
+       1,  1,
+       1, -1,
+    ]);
+
+    let buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, quadVertices, gl.STATIC_DRAW);
+
+    function renderShader() {
+      try {
+        errorOutput.textContent = "";
+        const frag = editor.value;
+        const program = createProgram(vertexShader, frag);
+        gl.useProgram(program);
+
+        const positionLoc = gl.getAttribLocation(program, "position");
+        gl.enableVertexAttribArray(positionLoc);
+        gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+
+        const resolutionLoc = gl.getUniformLocation(program, "resolution");
+        const timeLoc = gl.getUniformLocation(program, "time");
+
+        let start = performance.now();
+
+        function draw(now) {
+          now *= 0.001;
+          gl.clear(gl.COLOR_BUFFER_BIT);
+          gl.useProgram(program);
+          gl.uniform2f(resolutionLoc, canvas.width, canvas.height);
+          gl.uniform1f(timeLoc, now - start);
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+          requestAnimationFrame(draw);
+        }
+
+        requestAnimationFrame(draw);
+      } catch (err) {
+        errorOutput.textContent = err.message;
+      }
+    }
+
+    function toggleView() {
+      showEditor = !showEditor;
+      editor.style.display = showEditor ? 'block' : 'none';
+    }
+
+    function toggleResolution() {
+      fullRes = !fullRes;
+      dpr = fullRes ? window.devicePixelRatio : 0.5;
+      resizeCanvas();
+      renderShader();
+    }
+
+    function reset() {
+      editor.value = document.querySelector("script[type='x-shader/x-fragment']").textContent;
+      renderShader();
+    }
+
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+    });
+
+    window.onload = () => {
+      resizeCanvas();
+      editor.value = document.querySelector("script[type='x-shader/x-fragment']").textContent;
+      renderShader();
+    }
+  </script>
+  <script type="x-shader/x-fragment">
+  #version 300 es
+  precision highp float;
+  out vec4 O;
+  uniform float time;
+  uniform vec2 resolution;
+  void main() {
+    vec2 uv = gl_FragCoord.xy / resolution;
+    O = vec4(uv, sin(time) * 0.5 + 0.5, 1.0);
+  }
+  </script>
+</body>
+</html>
