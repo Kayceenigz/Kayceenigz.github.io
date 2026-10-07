@@ -1,277 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shane Silveira | Technical Game Designer</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shane Silveira | Game Developer</title>
+<meta name="description" content="Portfolio of Shane Silveira: gameplay programming, game and level design, systems balancing and monetization.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;700&family=Permanent+Marker&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Interactive Canvas Background -->
-    <canvas id="particle-canvas"></canvas>
+<canvas id="bg" aria-hidden="true"></canvas>
 
-    <!-- Navigation -->
-    <nav class="navbar" data-testid="main-navbar">
-        <div class="nav-content">
-            <div class="nav-brand" data-testid="nav-brand">
-                <i class="fas fa-gamepad brand-icon"></i>
-                <span class="brand-text">Shane Warren Silveira's Portfolio</span>
-            </div>
-            <div class="nav-links">
-                <a href="#about" class="nav-link" data-testid="nav-about-btn">About</a>
-                <a href="#projects" class="nav-link" data-testid="nav-projects-btn">Projects</a>
-                <a href="#contact" class="nav-link" data-testid="nav-contact-btn">Contact</a>
-            </div>
-        </div>
-    </nav>
+<header class="hud">
+  <div class="hud-id"><i class="fas fa-gamepad"></i> PLAYER 01 <span id="stage">// START</span></div>
+  <div class="xp" role="progressbar" aria-label="Page progress" aria-valuemin="0" aria-valuemax="100"><i id="xp"></i></div>
+  <div class="hud-stats"><span>LVL <b id="lvl">01</b></span><span><i class="fas fa-coins"></i> <b id="coins">0</b>/5</span></div>
+  <nav>
+    <a href="#about">About</a><a href="#services">Services</a><a href="#levels">Levels</a><a href="#contact">Contact</a>
+  </nav>
+</header>
 
-    <!-- Hero Section -->
-    <section class="hero-section" data-testid="hero-section">
-        <div class="hero-content">
-            <div class="hero-badge" data-testid="hero-badge">
-                <i class="fas fa-gamepad"></i>
-                <span>Technical Game Designer</span>
-            </div>
-            <h1 class="hero-title" data-testid="hero-title">
-                Building Immersive
-                <span class="hero-gradient"> Gaming Experiences</span>
-            </h1>
-            <p class="hero-subtitle" data-testid="hero-subtitle">
-                Passionate technical game designer specializing in creating captivating worlds,
-                engaging gameplay mechanics, and unforgettable player experiences.
-            </p>
-            <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary" data-testid="view-projects-btn">
-                    <i class="fas fa-play-circle"></i>
-                    View Projects
-                </a>
-                <a href="#contact" class="btn btn-secondary" data-testid="get-in-touch-btn">
-                    Get in Touch
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about-section" data-testid="about-section">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="about-title">About Me</h2>
-                <p class="section-subtitle" data-testid="about-subtitle">Building games that players love</p>
-            </div>
-            
-            <div class="about-content">
-                <div class="about-text">
-                    <p class="about-description" data-testid="about-description">
-                        Hi, I'm Shane Warren Silveira — a passionate and aspiring Game Developer currently pursuing my Bachelor's degree in Computer Science and Game Development. 
-                        While Unity is my primary tool, I also have hands-on experience with Unreal Engine, using both Blueprints and C++ to bring immersive ideas to life.
-                    </p>
-                    <p class="about-description" data-testid="about-description">
-                    Beyond programming, I have a deep interest in game design. I’m currently interning at Kyodai Gameworks, where I’ve had the opportunity to work on system design, 
-                    balancing, monetization models, and player metrics — helping me understand how games work not just technically, but as complete, enjoyable systems.
-                    </p>
-                    <p class="about-description" data-testid="about-description">
-                    This very website was designed and developed entirely by me from scratch — a side project that sparked my curiosity in web technologies. While game development 
-                    remains my primary focus, I’m actively learning web application development and looking to grow into full-stack development as well.
-                    </p>
-                    <p class="about-description" data-testid="about-description">
-                        <h2 class="section-title" data-testid="about-title">Here’s what I bring to the table:</h2>
-                        <li>Gameplay programming & prototyping (Unity C#, Unreal C++)</li>
-                        <li>Game & level design with a focus on balancing and systems</li>
-                        <li>Monetization strategies and metric analysis</li>
-                        <li>Web dev skills: HTML, CSS, JavaScript</li>
-                        <li>A drive to learn, build, and collaborate creatively</li>
-                    </p>
-                    <p class="about-description-secondary" data-testid="about-description-secondary">
-                        Outside of development, I’m someone who loves anything with an engine. I’m an avid biker, always seeking the next adventure — whether it’s hitting the open road or exploring new places off the beaten path. That same sense of exploration and thrill drives my approach to creating games and experiences that resonate with people.
-                        I’m excited to keep building, keep learning, and keep creating meaningful interactive experiences — both in games and on the web.
-                        <br><br><br><center><h2><span class="hero-gradient">Let’s make something awesome together.</span></h2></center>
-                    </p>
-                </div>
-                
-                <div class="about-stats">
-                    <div class="stat-card" data-testid="stat-years">
-                        <div class="stat-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">1</div>
-                            <div class="stat-label">Year Experience</div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card" data-testid="stat-games">
-                        <div class="stat-icon">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">10</div>
-                            <div class="stat-label">Games Worked On</div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card" data-testid="stat-players">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">4</div>
-                            <div class="stat-label">Community Events Attended</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects-section" data-testid="projects-section">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="projects-title">Featured Projects</h2>
-                <p class="section-subtitle" data-testid="projects-subtitle">Explore my latest game developments</p>
-            </div>
-            
-            <div class="projects-grid" id="projects-grid">
-                <!-- Projects will be dynamically loaded here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Video Modal -->
-    <div class="modal-overlay" id="video-modal" data-testid="video-modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close" data-testid="modal-close-btn">&times;</button>
-            <div class="modal-header">
-                <h3 id="modal-title" data-testid="modal-project-title"></h3>
-                <span class="badge" id="modal-genre" data-testid="modal-project-genre"></span>
-            </div>
-            <div class="video-container" data-testid="video-container">
-                <iframe
-                    id="modal-video"
-                    width="100%"
-                    height="100%"
-                    src=""
-                    title="Game Video"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    data-testid="video-iframe"
-                ></iframe>
-            </div>
-            <div class="modal-details">
-                <p id="modal-description" data-testid="modal-project-description"></p>
-                <div class="separator"></div>
-                <div class="modal-info">
-                    <div class="info-group">
-                        <span class="info-label">Platform:</span>
-                        <span id="modal-platform" data-testid="modal-project-platform"></span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">Genre:</span>
-                        <span id="modal-genre-full" data-testid="modal-project-genre-full"></span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">Release:</span>
-                        <span id="modal-release" data-testid="modal-project-release"></span>
-                    </div>
-                </div>
-                <div class="modal-features" data-testid="modal-project-features">
-                    <span class="features-label">Key Features:</span>
-                    <div class="features-list" id="modal-features"></div>
-                </div>
-            </div>
-        </div>
+<main>
+<section id="start" class="hero" data-stage="START">
+  <div class="frame hero-frame">
+    <p class="mono">PLAYER 01 // GAME DEVELOPER // ONLINE</p>
+    <h1>Shane Silveira</h1>
+    <p class="tag">Building better games<span class="caret"></span></p>
+    <p class="type"><span id="type"></span></p>
+    <div class="cta">
+      <a class="btn" href="#levels"><i class="fas fa-play"></i> Select level</a>
+      <a class="btn ghost" href="#contact">Contact</a>
     </div>
+    <p class="hint">Tip: five coins are hidden on this page.</p>
+  </div>
+</section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section" data-testid="contact-section">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="contact-title">Get in Touch</h2>
-                <p class="section-subtitle" data-testid="contact-subtitle">Let's create something amazing together</p>
-            </div>
-            
-            <div class="contact-content">
-                <div class="contact-text">
-                    <p data-testid="contact-intro">
-                        I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. 
-                        Whether you're a studio looking for a talented developer or a fellow creator wanting to collaborate, 
-                        feel free to reach out!
-                    </p>
-                </div>
-                
-                <div class="contact-links" id="contact-links">
-                    <a href="mailto:shanewsilveira@gmail.com" class="contact-link" data-testid="contact-email">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-info">
-                            <span class="contact-label">Email</span>
-                            <span class="contact-value">Reach Me Here</span>
-                        </div>
-                    </a>
-                    
-                    <a href="tel:+919902037919" class="contact-link" data-testid="contact-mobile">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="contact-info">
-                            <span class="contact-label">Phone</span>
-                            <span class="contact-value">+91 99020 37919</span>
-                        </div>
-                    </a>
-                    
-                    <a href="https://wa.me/+919902037919" target="_blank" rel="noopener noreferrer" class="contact-link" data-testid="contact-whatsapp">
-                        <div class="contact-icon">
-                            <i class="fab fa-whatsapp"></i>
-                        </div>
-                        <div class="contact-info">
-                            <span class="contact-label">WhatsApp</span>
-                            <span class="contact-value">Message Me</span>
-                        </div>
-                    </a>
-                    
-                    <a href="https://linkedin.com/in/shane-silveira" target="_blank" rel="noopener noreferrer" class="contact-link" data-testid="contact-linkedin">
-                        <div class="contact-icon">
-                            <i class="fab fa-linkedin"></i>
-                        </div>
-                        <div class="contact-info">
-                            <span class="contact-label">LinkedIn</span>
-                            <span class="contact-value">View Profile</span>
-                        </div>
-                    </a>
-                    
-                    <a href="https://instagram.com/kayceenigz" target="_blank" rel="noopener noreferrer" class="contact-link" data-testid="contact-instagram">
-                        <div class="contact-icon">
-                            <i class="fab fa-instagram"></i>
-                        </div>
-                        <div class="contact-info">
-                            <span class="contact-label">Instagram</span>
-                            <span class="contact-value">Follow Me</span>
-                        </div>
-                    </a>
+<section id="about" data-stage="ABOUT">
+  <h2>About</h2>
+  <div class="two">
+    <div class="frame">
+      <p>I'm a game developer and designer who likes games as whole systems: how they play, how they balance, and how they earn.</p>
+      <p>Unity is my main engine, with Unreal (Blueprints and C++) and Roblox Studio alongside it. I work at Juego Studios, and earlier I interned at Kyodai Gameworks on system design, balancing, monetization models and player metrics.</p>
+      <p>This site is hand-built too. Outside of work I ride bikes and chase anything with an engine.</p>
+    </div>
+    <div class="frame loadout">
+      <h3>Loadout</h3>
+      <ul class="tags"><li>Unity C#</li><li>Unreal C++</li><li>Blueprints</li><li>Roblox Studio</li><li>Game design docs</li><li>Shaders</li><li>HTML / CSS / JS</li></ul>
+    </div>
+  </div>
+</section>
 
-                    <a href="https://kayceenigz.itch.io/" target="_blank" rel="noopener noreferrer" class="contact-link" data-testid="contact-itchio">
-                        <div class="contact-icon">
-                            <i class="fa-brands fa-itch-io"></i>
-                        </div>
-                        <div class="contact-info">
-                            <span class="contact-label">Itch.io</span>
-                            <span class="contact-value">Follow Me</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+<section id="services" data-stage="SERVICES">
+  <h2>Services</h2>
+  <div class="quests frame">
+    <details open><summary>Gameplay programming &amp; prototyping</summary><p>Playable prototypes in Unity and Unreal that prove a mechanic is fun before it gets expensive.</p></details>
+    <details><summary>Game &amp; level design</summary><p>Level flow, pacing and onboarding, written up as clear design documents.</p></details>
+    <details><summary>Balancing &amp; systems</summary><p>Economy, progression and difficulty tuned with numbers instead of guesses.</p></details>
+    <details><summary>Monetization strategies</summary><p>Ethical monetization that fits the game loop instead of fighting it.</p></details>
+    <details><summary>Metric analysis</summary><p>Reading retention and player behavior to decide what to change next.</p></details>
+    <details><summary>Web development</summary><p>Fast, interactive sites in HTML, CSS and JavaScript, like this one.</p></details>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="footer" data-testid="footer">
-        <p>&copy; 2025 Shane Warren Silveira. All Rights Reserved.</p>
-    </footer>
+<section id="levels" data-stage="LEVEL SELECT">
+  <h2>Level select</h2>
+  <p class="sub">Pick a level. Use the arrow keys or tap a cartridge.</p>
+  <div class="frame panel" id="panel" aria-live="polite"></div>
+  <div class="lvls" id="lvls" role="listbox" aria-label="Projects"></div>
+</section>
 
-    <script src="script.js"></script>
+<section id="contact" data-stage="CONTACT">
+  <h2>Press start</h2>
+  <p class="sub">Studio, team or fellow creator: send a message and let's build something.</p>
+  <div class="links">
+    <a class="frame" href="mailto:shanewsilveira@gmail.com"><i class="fas fa-envelope"></i>Email</a>
+    <a class="frame" href="tel:+919902037919"><i class="fas fa-phone"></i>+91 99020 37919</a>
+    <a class="frame" href="https://wa.me/919902037919" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i>WhatsApp</a>
+    <a class="frame" href="https://linkedin.com/in/shane-silveira" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i>/shane-silveira</a>
+    <a class="frame" href="https://instagram.com/kayceenigz" target="_blank" rel="noopener"><i class="fab fa-instagram"></i>@kayceenigz</a>
+    <a class="frame" href="https://kayceenigz.itch.io/" target="_blank" rel="noopener"><i class="fa-brands fa-itch-io"></i>kayceenigz.itch.io</a>
+  </div>
+</section>
+</main>
+
+<footer class="mono"><span class="dot"></span> PLAYER 01 // GAME DEVELOPER // ONLINE &copy; 2026 Shane Silveira</footer>
+<div class="toast" id="toast" role="status"></div>
+<script src="script.js"></script>
 </body>
 </html>
